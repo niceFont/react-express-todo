@@ -1,0 +1,48 @@
+#main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10em 0 3em 0;
+}
+
+#list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0em 0 10em 0;
+}
+
+#board {
+    background: url("http://clipartix.com/wp-content/uploads/2016/12/Background-clipart-file-tag-list-clip-arts-svg-2.png");
+    background-size: 100% 100%;
+    background-position: center;
+    width: 25em;
+    height: 35em;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 6.4em 2em 3em 2em;
+}
+
+ul {
+    flex: 0 1 auto;
+    align-self: auto;
+    margin: 0;
+    padding: 0;
+    overflow: no-wrap;
+    z-index: 10;
+    text-align: center;
+    overflow: auto;
+}
+
+li {
+    z-index: -1;
+    margin: 1em 0 0 0;
+    border-bottom: 1px solid gray;
+    list-style: none;
+    cursor: pointer;
+    user-select: none;
+}
