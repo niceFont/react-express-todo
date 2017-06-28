@@ -1,3 +1,7 @@
+.container {
+    text-align: center;
+}
+
 #main {
     display: flex;
     flex-direction: column;
@@ -11,20 +15,19 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 0em 0 10em 0;
+    margin: 2em 0 10em 0;
 }
 
 #board {
-    background: url("http://clipartix.com/wp-content/uploads/2016/12/Background-clipart-file-tag-list-clip-arts-svg-2.png");
-    background-size: 100% 100%;
-    background-position: center;
     width: 25em;
-    height: 35em;
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
-    padding: 6.4em 2em 3em 2em;
+    padding: 1em;
+    box-shadow: -2px 1px 5px 2px rgba(0, 0, 0, .4);
+    background: #0f0f0e;
 }
 
 ul {
@@ -32,17 +35,63 @@ ul {
     align-self: auto;
     margin: 0;
     padding: 0;
-    overflow: no-wrap;
     z-index: 10;
     text-align: center;
-    overflow: auto;
 }
 
 li {
     z-index: -1;
+    font-size: 19px;
     margin: 1em 0 0 0;
-    border-bottom: 1px solid gray;
     list-style: none;
     cursor: pointer;
     user-select: none;
+    background: #353535;
+    color: white;
+    padding: 1em 0 1em 0;
+}
+
+span {
+    margin: 1em;
+}
+
+input[type="submit"] {
+    background: #0f0f0e;
+    color: white;
+    outline: none;
+}
+
+input[type="submit"]:hover {
+    background: #353535;
+    color: white;
+}
+
+input[type="submit"]:focus {
+    background: #353535;
+    color: white;
+}
+
+h1 {
+    font-size: 3em;
+}
+
+button {
+    margin: 2em 0 0 0;
+    background: #80e27e;
+    font-size: 22px;
+    color: #087f23;
+    font-weight: bold;
+    box-shadow: inset 0px 0px 1px 0px rgba(0, 0, 0, .4);
+}
+
+button:hover {
+    opacity: .8;
+    background: #80e27e;
+    transition: opacity .5s, background .5s;
+}
+
+button:focus {
+    opacity: .8;
+    background: #80e27e;
+    transition: opacity .5s, background .5s;
 }

@@ -4,70 +4,68 @@ const app = express();
 const path = require("path")
 const bodyParser = require("body-parser");
 const Port = process.env.PORT || 8000;
-const { buildTodo, checkEmptyObject, findTodos, saveTodo, updateTodo } = require("./Promises");
-
+const { clearAllTodos, buildTodo, checkEmptyObject, findTodos, saveTodo, updateTodo } = require("./Promises");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static("static"));
 
 
 
-app.get("/api", (request, response) => {
-    async function sendTodos() {
-        try {
-            let find = await findTodos()
-            return find;
-        } catch (err) {
-            response.status(500).send(err)
-            console.error(err);
-        }
+
+app.get("/api", async(request, response, next) => {
+    try {
+        let find = await findTodos()
+        return response.status(200).send(find)
+    } catch (err) {
+        next(err);
     }
-    sendTodos()
-        .then((data) => response.send(data))
-
-
-
 })
 
-app.get("*", (request, response) => {
+app.get("/", (request, response) => {
     response.sendFile(path.join(__dirname, "static/html/index.html"));
 });
 
 
-app.post("/api", (request, response) => {
-    async function processTodo(object) {
-        try {
-            let check = await checkEmptyObject(object)
-            let build = await buildTodo(check)
-            let save = await saveTodo(build)
-            let find = await findTodos()
-            return find
-        } catch (err) {
-            response.status(500).send(err)
-            console.error(err);
-        }
+app.post("/api", async(request, response, next) => {
+    try {
+        let check = await checkEmptyObject(request.body)
+        let build = await buildTodo(check)
+        let save = await saveTodo(build)
+        let find = await findTodos()
+        return response.status(200).send(find)
+    } catch (err) {
+        next(err)
     }
-    processTodo(request.body)
-        .then(data => response.send(data))
-
-
 });
 
-app.put("/api", (request, response) => {
-    async function UpdateTodo(obj) {
-        try {
-            let update = await updateTodo(obj)
-            let find = await findTodos()
-            return find
-        } catch (err) {
-            response.status(500).send(err)
-            console.error(err);
-        }
+app.put("/api", async(request, response, next) => {
+    try {
+        let update = await updateTodo(request.body)
+        let find = await findTodos()
+        return response.status(200).send(find)
+    } catch (err) {
+        next(err);
     }
 
-    UpdateTodo(request.body)
-        .then(data => response.status(200).send(data))
+})
 
+app.delete("/api", async(request, response, next) => {
+    try {
+        let clearing = await clearAllTodos();
+        return response.status(200).send("Success")
+    } catch (err) {
+        next(err);
+    }
+})
+
+app.use((err, request, response, next) => {
+
+    console.error(err)
+    return response.status(500).send("Error: Something broke!")
+})
+
+app.get("*", (request, response) => {
+    response.status(404).send("Not Found")
 })
 
 app.listen(Port, () => {

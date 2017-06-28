@@ -3,7 +3,13 @@ const Todo = require("./database/database");
 
 
 module.exports = {
-
+    clearAllTodos: () => {
+        return new Promise((resolve, reject) => {
+            mongoose.connection.db.dropCollection('todos')
+                .then(result => resolve(result))
+                .catch(err => reject(err))
+        })
+    },
     updateTodo: (obj) => {
         return new Promise((resolve, reject) => {
             Todo.findOneAndUpdate({ _id: obj._id }, { completed: obj.completed })
