@@ -9,10 +9,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static("static"));
 
+function checkAuthorized(request, response, next) {
+    let apiKey = request.get("Custom-API");
+    if (apiKey !== undefined && apiKey === process.env.APIKEY) {
+        return next();
+    } else {
+        return response.status(401).send("Unauthorized Access")
+    }
+}
 
 
-
-app.get("/api", async(request, response, next) => {
+app.get("/api", checkAuthorized, async(request, response, next) => {
     try {
         let find = await findTodos()
         return response.status(200).send(find)
@@ -26,7 +33,7 @@ app.get("/", (request, response) => {
 });
 
 
-app.post("/api", async(request, response, next) => {
+app.post("/api", checkAuthorized, async(request, response, next) => {
     try {
         let check = await checkEmptyObject(request.body)
         let build = await buildTodo(check)
@@ -38,7 +45,7 @@ app.post("/api", async(request, response, next) => {
     }
 });
 
-app.put("/api", async(request, response, next) => {
+app.put("/api", checkAuthorized, async(request, response, next) => {
     try {
         let update = await updateTodo(request.body)
         let find = await findTodos()
@@ -49,7 +56,7 @@ app.put("/api", async(request, response, next) => {
 
 })
 
-app.delete("/api", async(request, response, next) => {
+app.delete("/api", checkAuthorized, async(request, response, next) => {
     try {
         let clearing = await clearAllTodos();
         return response.status(200).send("Success")
@@ -61,7 +68,7 @@ app.delete("/api", async(request, response, next) => {
 app.use((err, request, response, next) => {
 
     console.error(err)
-    return response.status(500).send("Error: Something broke!")
+    return response.status(500).send(err)
 })
 
 app.get("*", (request, response) => {

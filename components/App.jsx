@@ -1,6 +1,5 @@
 import React from "react";
 
-
 const styles = {
     completed: {
         textDecoration: "line-through",
@@ -35,13 +34,15 @@ class App extends React.Component {
         let xhr = new XMLHttpRequest();
         xhr.open("DELETE", "/api", true);
         xhr.setRequestHeader("Content-Type", "application/json")
+        xhr.setRequestHeader("Custom-API", "af704b6c-32ed-423a-9013-0f090d24bd88")
         xhr.onreadystatechange = () => {
             if(xhr.readyState === 4 && xhr.status === 200){
                  this.setState({todos: JSON.parse(xhr.responseText)
                 })
             }
             else if (xhr.status=== 500){
-                this.setState({error: "Database Error"})
+                
+                this.setState({error: xhr.statusText})
             }
         }
         xhr.send(null)
@@ -65,6 +66,7 @@ class App extends React.Component {
 
         const xhr = new XMLHttpRequest();
         xhr.open("PUT", "/api", true);
+        xhr.setRequestHeader("Custom-API", "af704b6c-32ed-423a-9013-0f090d24bd88")
         xhr.setRequestHeader("Content-Type", "application/json")
         xhr.onreadystatechange = () => {
             if(xhr.readyState === 4 && xhr.status === 200){
@@ -72,7 +74,7 @@ class App extends React.Component {
                 })
             }
             else if (xhr.status > 200) {
-                this.setState({error: "Database Error"})
+                this.setState({error: xhr.statusText})
             }
         }
         xhr.send(JSON.stringify(data));
@@ -92,12 +94,14 @@ class App extends React.Component {
             let data = {todo: submittedTodo}
             const xhr = new XMLHttpRequest();
             xhr.open("POST", "/api", true);
+            xhr.setRequestHeader("Custom-API", "af704b6c-32ed-423a-9013-0f090d24bd88")
             xhr.setRequestHeader("Content-Type", "application/json")
             xhr.onreadystatechange = () => {
                 if(xhr.readyState === 4 && xhr.status === 200) {
                     this.setState({error: false, todos: JSON.parse(xhr.responseText)});}
                 else {
-                    this.setState({error: "Todo Rejected: Empty Todo passed"})
+                    
+                    this.setState({error: xhr.statusText})
                 }
             }
 
@@ -109,7 +113,18 @@ class App extends React.Component {
 
     //FETCHING THE TODO LIST
     componentDidMount() {
-        fetch("/api")
+
+        let headers = new Headers({
+            "Custom-API": "af704b6c-32ed-423a-9013-0f090d24bd88"
+        })
+        let init = {
+            method: "GET",
+            headers: headers,
+            mode: "cors",
+            cache: "default"
+        }
+        
+        fetch("/api", init)
             .then((response) => {
                 response.json()
                 .then(data =>{
